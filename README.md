@@ -1,6 +1,6 @@
 # highlight-selected
 
-Highlight all occurrences of the selected text in the editor.
+Highlight all occurrences of the selected text.
 
 ## Features
 

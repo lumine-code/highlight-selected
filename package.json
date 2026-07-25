@@ -1,7 +1,7 @@
 {
   "name": "highlight-selected",
   "author": "lumine-code",
-  "description": "Highlight all occurrences of the selected text in the editor",
+  "description": "Highlight all occurrences of the selected text.",
   "repository": "https://github.com/lumine-code/highlight-selected",
   "bugs": {
     "url": "https://github.com/lumine-code/highlight-selected/issues"

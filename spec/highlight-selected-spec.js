@@ -150,12 +150,27 @@ describe("highlight-selected", () => {
   });
 
   describe("highlight-selected service", () => {
-    it("provides the selection manager with its event API", () => {
+    it("provides a facade with the event API and a marker accessor", () => {
       const service = mainModule.provideHighlightSelected();
-      expect(service).toBe(selectionManager);
       expect(typeof service.onDidFinishAddingMarkers).toBe("function");
       expect(typeof service.onDidRemoveAllMarkers).toBe("function");
-      expect(typeof service.editorToMarkerLayerMap).toBe("object");
+      expect(typeof service.getMarkersForEditor).toBe("function");
+      // The internal selection manager stays private.
+      expect(service.editorToMarkerLayerMap).toBeUndefined();
+
+      let finished = false;
+      const sub = service.onDidFinishAddingMarkers(() => {
+        finished = true;
+      });
+      editor.setSelectedBufferRange([
+        [0, 0],
+        [0, 5],
+      ]);
+      flushDebounce();
+      sub.dispose();
+
+      expect(finished).toBe(true);
+      expect(service.getMarkersForEditor(editor).length).toBe(2);
     });
   });
 });

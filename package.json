@@ -7,8 +7,11 @@
     "url": "https://github.com/lumine-code/highlight-selected/issues"
   },
   "keywords": [
-    "highlight",
-    "selection"
+    "occurrences",
+    "word",
+    "mark",
+    "navigation",
+    "match"
   ],
   "version": "1.0.0",
   "license": "MIT",

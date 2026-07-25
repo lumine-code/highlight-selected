@@ -1,36 +1,43 @@
-# highlight-simple
+# highlight-selected
 
 Highlight all occurrences of the selected text in the editor.
 
-![view](https://github.com/asiloisad/pulsar-highlight-simple/blob/master/assets/view.png?raw=true)
-
-Fork of [highlight-selected](https://github.com/Pulsar-Edit-Highlights/selected).
-
 ## Features
 
-- **Automatic highlighting**: Highlights all matching occurrences when text is selected.
-- **Customizable style**: Override highlight appearance via stylesheet.
-- **Scrollmap**: Shows highlight markers in the scrollbar via [scrollmap](https://github.com/asiloisad/pulsar-scrollmap).
+- **Automatic highlighting**: highlights all matching occurrences when text is selected.
+- **Occurrence navigation**: jump to the next or previous highlighted occurrence.
+- **Customizable style**: override highlight appearance via stylesheet.
+- **Scrollmap**: shows highlight markers in the scrollbar via the scrollmap package.
 
 ## Installation
 
-To install `highlight-simple` search for [highlight-simple](https://web.pulsar-edit.dev/packages/highlight-simple) in the Install pane of the Pulsar settings or run `ppm install highlight-simple`. Alternatively, you can run `ppm install asiloisad/pulsar-highlight-simple` to install a package directly from the GitHub repository.
+To install `highlight-selected` search for _highlight-selected_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/highlight-selected`.
+
+## Commands
+
+Commands available in `atom-workspace`:
+
+- `highlight-selected:toggle`: enable or disable highlighting,
+- `highlight-selected:go-to-next`: select the next highlighted occurrence,
+- `highlight-selected:go-to-previous`: select the previous highlighted occurrence.
 
 ## Customization
 
-The style can be adjusted according to user preferences in the `styles.less` file:
-
-- e.g. change highlight style:
+The style can be adjusted according to user preferences in the `styles.less` file, e.g. change highlight style:
 
 ```less
 atom-text-editor .highlights {
-  .highlight-simple .region {
-    border: 1px solid @syntax-result-marker-color;
-    background-color: @syntax-result-marker-color-selected;
+  .highlight-selected .region {
+    border: 1px solid var(--syntax-result-marker-color);
+    background-color: var(--syntax-result-marker-color-selected);
     border-radius: 3px;
   }
 }
 ```
+
+## Services
+
+- **highlight-selected** (`1.0.0`): provided to expose the selection manager — other packages can observe marker events via `onDidFinishAddingMarkers` / `onDidRemoveAllMarkers` and read the per-editor marker layers.
 
 ## Contributing
 

@@ -1,0 +1,17 @@
+{
+  "menu": [
+    {
+      "label": "Packages",
+      "submenu": [
+        {
+          "label": "Highlight Selected",
+          "submenu": [
+            { "label": "Toggle", "command": "highlight-selected:toggle" },
+            { "label": "Go to Next", "command": "highlight-selected:go-to-next" },
+            { "label": "Go to Previous", "command": "highlight-selected:go-to-previous" }
+          ]
+        }
+      ]
+    }
+  ]
+}

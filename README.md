@@ -37,7 +37,7 @@ atom-text-editor .highlights {
 
 ## Services
 
-- **highlight-selected** (`1.0.0`): provided to expose the selection manager — other packages can observe marker events via `onDidFinishAddingMarkers` / `onDidRemoveAllMarkers` and read the per-editor marker layers.
+- **[highlight-selected](docs/highlight-selected.md)** (`1.0.0`): provided to expose the selection manager — other packages can observe marker events via `onDidFinishAddingMarkers` / `onDidRemoveAllMarkers` and read the per-editor marker layers.
 
 ## Contributing
 

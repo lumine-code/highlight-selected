@@ -22,6 +22,13 @@
     "{% if keys['highlight-selected:go-to-next'] %}You can jump to the next occurrence of the selected text with {{ 'highlight-selected:go-to-next' | keystroke }}{% else %}Selecting a word highlights every other occurrence of it in the file.{% endif %}"
   ],
   "main": "./lib/main",
+  "files": [
+    "docs",
+    "lib",
+    "menus",
+    "spec",
+    "styles"
+  ],
   "scripts": {
     "test": "lumine --test spec",
     "lint": "eslint . --max-warnings 0",

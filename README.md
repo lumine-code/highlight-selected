@@ -23,9 +23,9 @@ Commands available in `atom-workspace`:
 
 ## Customization
 
-The style can be adjusted according to user preferences in the `styles.less` file, e.g. change highlight style:
+The style can be adjusted according to user preferences in the `styles.css` file, e.g. change highlight style:
 
-```less
+```css
 atom-text-editor .highlights {
   .highlight-selected .region {
     border: 1px solid var(--syntax-result-marker-color);

@@ -46,7 +46,7 @@ A narrow facade over the package's selection manager, so consumers never depend 
 ## Minimal example
 
 ```js
-const { CompositeDisposable, Disposable } = require("atom");
+const { CompositeDisposable, Disposable } = require("lumine");
 
 module.exports = {
   consumeHighlightSelected(service) {

@@ -7,26 +7,26 @@ describe("highlight-selected", () => {
   }
 
   function flushDebounce() {
-    advanceClock(atom.config.get("highlight-selected.timeout") + 10);
+    advanceClock(lumine.config.get("highlight-selected.timeout") + 10);
   }
 
   beforeEach(async () => {
-    workspaceElement = atom.views.getView(atom.workspace);
+    workspaceElement = lumine.views.getView(lumine.workspace);
     jasmine.attachToDOM(workspaceElement);
 
-    const pack = await atom.packages.activatePackage("highlight-selected");
+    const pack = await lumine.packages.activatePackage("highlight-selected");
     mainModule = pack.mainModule;
     selectionManager = mainModule.selectionManager;
 
-    editor = await atom.workspace.open();
-    editorElement = atom.views.getView(editor);
+    editor = await lumine.workspace.open();
+    editorElement = lumine.views.getView(editor);
     editor.setText("hello world\nhello there\nhello again\nsomething else\n");
   });
 
   describe("activation", () => {
     it("activates and registers its commands", () => {
-      expect(atom.packages.isPackageActive("highlight-selected")).toBe(true);
-      const commands = atom.commands
+      expect(lumine.packages.isPackageActive("highlight-selected")).toBe(true);
+      const commands = lumine.commands
         .findCommands({ target: workspaceElement })
         .map((command) => command.name);
       expect(commands).toContain("highlight-selected:toggle");
@@ -81,7 +81,7 @@ describe("highlight-selected", () => {
     });
 
     it("caps the number of highlights at the maximumHighlights setting", () => {
-      atom.config.set("highlight-selected.maximumHighlights", 1);
+      lumine.config.set("highlight-selected.maximumHighlights", 1);
       editor.setSelectedBufferRange([
         [0, 0],
         [0, 5],
@@ -115,11 +115,11 @@ describe("highlight-selected", () => {
       flushDebounce();
       expect(getMarkers().length).toBe(2);
 
-      atom.commands.dispatch(editorElement, "highlight-selected:toggle");
+      lumine.commands.dispatch(editorElement, "highlight-selected:toggle");
       expect(selectionManager.disabled).toBe(true);
       expect(getMarkers().length).toBe(0);
 
-      atom.commands.dispatch(editorElement, "highlight-selected:toggle");
+      lumine.commands.dispatch(editorElement, "highlight-selected:toggle");
       expect(selectionManager.disabled).toBe(false);
       flushDebounce();
       expect(getMarkers().length).toBe(2);
@@ -137,13 +137,13 @@ describe("highlight-selected", () => {
     });
 
     it("go-to-next selects the next occurrence", () => {
-      atom.commands.dispatch(editorElement, "highlight-selected:go-to-next");
+      lumine.commands.dispatch(editorElement, "highlight-selected:go-to-next");
       expect(editor.getSelectedBufferRange().start.row).toBe(1);
       expect(editor.getSelectedText()).toBe("hello");
     });
 
     it("go-to-previous wraps around to the last occurrence", () => {
-      atom.commands.dispatch(editorElement, "highlight-selected:go-to-previous");
+      lumine.commands.dispatch(editorElement, "highlight-selected:go-to-previous");
       expect(editor.getSelectedBufferRange().start.row).toBe(2);
       expect(editor.getSelectedText()).toBe("hello");
     });

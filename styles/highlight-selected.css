@@ -1,4 +1,4 @@
-atom-text-editor .highlights .highlight-selected .region {
+lumine-text-editor .highlights .highlight-selected .region {
   background-color: color-mix(in srgb, var(--syntax-result-marker-color-selected) 20%, transparent);
   border-radius: var(--component-border-radius);
 }

@@ -15,7 +15,7 @@ To install `highlight-selected` search for _highlight-selected_ in the Install p
 
 ## Commands
 
-Commands available in `atom-workspace`:
+Commands available in `lumine-workspace`:
 
 - `highlight-selected:toggle`: enable or disable highlighting,
 - `highlight-selected:go-to-next`: select the next highlighted occurrence,
@@ -26,7 +26,7 @@ Commands available in `atom-workspace`:
 The style can be adjusted according to user preferences in the `styles.css` file, e.g. change highlight style:
 
 ```css
-atom-text-editor .highlights {
+lumine-text-editor .highlights {
   .highlight-selected .region {
     border: 1px solid var(--syntax-result-marker-color);
     background-color: var(--syntax-result-marker-color-selected);

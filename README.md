@@ -11,7 +11,7 @@ Highlight all occurrences of the selected text.
 
 ## Installation
 
-To install `highlight-selected` search for _highlight-selected_ in the Install pane of the Lumine settings or run `lumine --install lumine-code/highlight-selected`.
+To install `highlight-selected` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/highlight-selected`.
 
 ## Commands
 
@@ -37,7 +37,7 @@ lumine-text-editor .highlights {
 
 ## Services
 
-- **[highlight-selected](docs/highlight-selected.md)** (`1.0.0`): provided to expose the selection manager — other packages can observe marker events via `onDidFinishAddingMarkers` / `onDidRemoveAllMarkers` and read the per-editor marker layers.
+- [`highlight-selected`](docs/highlight-selected.md): provided to expose the selection manager — other packages can observe marker events via `onDidFinishAddingMarkers` / `onDidRemoveAllMarkers` and read the per-editor marker layers.
 
 ## Contributing
 

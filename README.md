@@ -7,7 +7,7 @@ Highlight all occurrences of the selected text.
 - **Automatic highlighting**: highlights all matching occurrences when text is selected.
 - **Occurrence navigation**: jump to the next or previous highlighted occurrence.
 - **Customizable style**: override highlight appearance via stylesheet.
-- **Scrollmap**: shows highlight markers in the scrollbar via the scrollmap package.
+- **Scrollbar markers**: shows the highlighted occurrences on the scrollbar and minimap via the marker hub.
 
 ## Installation
 
@@ -38,6 +38,7 @@ lumine-text-editor .highlights {
 ## Services
 
 - [`highlight-selected`](docs/highlight-selected.md): provided to expose the selection manager — other packages can observe marker events via `onDidFinishAddingMarkers` / `onDidRemoveAllMarkers` and read the per-editor marker layers.
+- `marker.layer`: provided to draw the highlighted occurrences on the editor's overview maps (scrollbar, minimap).
 
 ## Contributing
 

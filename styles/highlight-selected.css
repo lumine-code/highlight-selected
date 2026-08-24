@@ -1,7 +1,7 @@
-/* A dimmed selection color, not a result-marker tint: occurrences of the
-   selection must read as "same as selected", and stay distinguishable from
+/* The selection color, not a result-marker tint: occurrences of the selection
+   must read as "same as selected", and stay distinguishable from
    search-panel's find-result regions, which own the result-marker colors. */
 lumine-text-editor .highlights .highlight-selected .region {
-  background-color: color-mix(in srgb, var(--syntax-selection-color) 60%, transparent);
+  background-color: var(--syntax-selection-color);
   border-radius: var(--component-border-radius);
 }

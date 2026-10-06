@@ -3,5 +3,5 @@
    search-panel's find-result regions, which own the result-marker colors. */
 lumine-text-editor .highlights .highlight-selected .region {
   background-color: var(--syntax-selection-color);
-  border-radius: var(--component-border-radius);
+  border-radius: var(--ui-border-radius);
 }

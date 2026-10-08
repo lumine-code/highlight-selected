@@ -71,6 +71,8 @@ Neither replays on subscribe, so read the current state once when you receive th
 
 The markers are live `DisplayMarker`s owned by `highlight-selected`; read positions on demand and never destroy them.
 
+Markers remain available while their editor is alive, including when a close listener prevents or delays closing it. Destroying the editor or deactivating the package releases its highlight layers.
+
 Highlighting is off while the package is disabled by the user, in which case the marker list is simply always empty.
 
 ## Teardown

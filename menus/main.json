@@ -8,7 +8,9 @@
           "submenu": [
             {
               "label": "Highlight Selected",
-              "command": "highlight-selected:toggle"
+              "command": "highlight-selected:toggle",
+              "group": "editing",
+              "order": 30
             }
           ]
         }
@@ -19,11 +21,15 @@
       "submenu": [
         {
           "label": "Go to Next Highlighted Match",
-          "command": "highlight-selected:go-to-next"
+          "command": "highlight-selected:go-to-next",
+          "group": "matches",
+          "order": 10
         },
         {
           "label": "Go to Previous Highlighted Match",
-          "command": "highlight-selected:go-to-previous"
+          "command": "highlight-selected:go-to-previous",
+          "group": "matches",
+          "order": 20
         }
       ]
     },

@@ -1,0 +1,16 @@
+{
+  "title": "highlight-selected",
+  "description": "Selecting a word highlights its other occurrences in the file.",
+  "recordedOn": "2026-10-13",
+  "sourceRevision": "5f90826dffb09fdb810d022a6bb363375e65c53c",
+  "mode": "normal",
+  "fontSettings": "default",
+  "images": [
+    {
+      "file": "demo.png",
+      "label": "Selecting a word highlights its other occurrences in the file.",
+      "width": 1100,
+      "height": 730
+    }
+  ]
+}

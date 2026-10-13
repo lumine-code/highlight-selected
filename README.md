@@ -9,6 +9,8 @@ Highlight all occurrences of the selected text.
 - **Customizable style**: override highlight appearance via stylesheet.
 - **Scrollbar markers**: shows the highlighted occurrences on the scrollbar and minimap via the marker hub.
 
+![Selecting a word highlights its other occurrences in the file.](.github/demo.png)
+
 ## Installation
 
 To install `highlight-selected` search for it in the Install pane of the Lumine settings, or run the command `lumine --install lumine-code/highlight-selected`.

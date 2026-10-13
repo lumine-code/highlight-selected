@@ -1,6 +1,33 @@
 {
   "menu": [
     {
+      "label": "View",
+      "submenu": [
+        {
+          "label": "Editor",
+          "submenu": [
+            {
+              "label": "Highlight Selected",
+              "command": "highlight-selected:toggle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Search",
+      "submenu": [
+        {
+          "label": "Go to Next Highlighted Match",
+          "command": "highlight-selected:go-to-next"
+        },
+        {
+          "label": "Go to Previous Highlighted Match",
+          "command": "highlight-selected:go-to-previous"
+        }
+      ]
+    },
+    {
       "label": "Packages",
       "submenu": [
         {

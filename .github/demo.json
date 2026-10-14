@@ -1,16 +1,61 @@
 {
   "title": "highlight-selected",
   "description": "Selecting a word highlights its other occurrences in the file.",
-  "recordedOn": "2026-10-13",
-  "sourceRevision": "5f90826dffb09fdb810d022a6bb363375e65c53c",
+  "recordedOn": "2026-10-14",
+  "sourceRevision": "c4cf7b439688ab227b4c5a72112f8ad5728a0287",
+  "themeSourceRevision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
   "mode": "normal",
   "fontSettings": "default",
+  "scenario": "demo.js",
+  "recipeHash": "dcce75df9f42bf1fef42488837ffbfe0efa54dfb9f5f3463e9c05e81c7507d90",
+  "environment": {
+    "platform": "win32",
+    "arch": "x64",
+    "electron": "44.7.0",
+    "chrome": "152.0.7977.130",
+    "devicePixelRatio": 1,
+    "locale": "en-GB",
+    "fontFamily": "Fira Code, Menlo, DejaVu Sans Mono, Consolas, monospace",
+    "fontSize": 14,
+    "themes": ["one-day-syntax", "one-day-ui"]
+  },
+  "viewport": { "width": 1100, "height": 730 },
+  "cornerRadius": 10,
+  "sources": {
+    "editor": {
+      "revision": "8be8f86075ad93df038610d82b3ac6d99329957d",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "package": {
+      "revision": "c4cf7b439688ab227b4c5a72112f8ad5728a0287",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "highlight-selected": {
+      "revision": "c4cf7b439688ab227b4c5a72112f8ad5728a0287",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "one-theme": {
+      "revision": "7fbd047a87ecf1367c896b19ff270cdc28d319f7",
+      "dirty": false,
+      "workingTreeHash": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "fixtures": [
+    {
+      "file": "usage/signal.js",
+      "sha256": "2a36953daadd1ae53070d0ff7ceab4624395fdb957104aa6e8ec92d785cadf1d"
+    }
+  ],
   "images": [
     {
       "file": "demo.png",
       "label": "Selecting a word highlights its other occurrences in the file.",
       "width": 1100,
-      "height": 730
+      "height": 730,
+      "sha256": "30184ec046a193b643d6abe360883f42f8d5376d484b45d55286fdf3895f6620"
     }
   ]
 }

@@ -17,7 +17,7 @@
       ]
     },
     {
-      "label": "Search",
+      "label": "Go",
       "submenu": [
         {
           "label": "Go to Next Highlighted Match",

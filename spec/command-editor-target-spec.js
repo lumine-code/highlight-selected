@@ -68,8 +68,8 @@ describe("Highlight occurrence command editor targets", () => {
     ]);
   });
 
-  it("keeps the active editor fallback and its UTF-16 marker positions for menu dispatch", async () => {
-    await lumine.commands.dispatch(lumine.workspace.getElement(), "highlight-selected:go-to-next");
+  it("uses saved editor focus and its UTF-16 marker positions for menu dispatch", async () => {
+    await lumine.commands.dispatch(editor.getElement(), "highlight-selected:go-to-next");
     expect(editor.getSelectedBufferRange().serialize()).toEqual([
       [0, 7],
       [0, 10],

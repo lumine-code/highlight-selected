@@ -27,11 +27,24 @@ describe("highlight-selected", () => {
     it("activates and registers its commands", () => {
       expect(lumine.packages.isPackageActive("highlight-selected")).toBe(true);
       const commands = lumine.commands
-        .findCommands({ target: workspaceElement })
+        .findCommands({ target: editorElement })
         .map((command) => command.name);
       expect(commands).toContain("highlight-selected:toggle");
       expect(commands).toContain("highlight-selected:go-to-next");
       expect(commands).toContain("highlight-selected:go-to-previous");
+    });
+
+    it("keeps occurrence navigation local while the highlighting switch remains global", () => {
+      expect(lumine.commands.canDispatch(workspaceElement, "highlight-selected:toggle")).toBe(true);
+      expect(lumine.commands.canDispatch(workspaceElement, "highlight-selected:go-to-next")).toBe(
+        false,
+      );
+      const mini = lumine.workspace.buildTextEditor({ mini: true });
+      workspaceElement.appendChild(mini.getElement());
+      expect(lumine.commands.canDispatch(mini.getElement(), "highlight-selected:go-to-next")).toBe(
+        false,
+      );
+      mini.destroy();
     });
 
     it("creates a marker layer with a highlight-selected decoration per editor", () => {

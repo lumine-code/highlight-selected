@@ -19,7 +19,10 @@ To install `highlight-selected` search for it in the Install pane of the Lumine 
 
 Commands available in `lumine-workspace`:
 
-- `highlight-selected:toggle`: enable or disable highlighting,
+- `highlight-selected:toggle`: enable or disable highlighting.
+
+Commands available in `lumine-text-editor:not([mini])`:
+
 - `highlight-selected:go-to-next`: select the next highlighted occurrence,
 - `highlight-selected:go-to-previous`: select the previous highlighted occurrence.
 

@@ -28,14 +28,16 @@ describe("highlight-selected marker layer", () => {
   }
 
   // Fake service mirroring the facade returned by provideHighlightSelected():
-  // onDidChangeMarkers(editor) and getMarkersForEditor(editor).
+  // onDidFinishAddingMarkers, onDidRemoveAllMarkers, and
+  // getMarkersForEditor(editor).
   function makeFakeService() {
     const emitter = new Emitter();
     const markerLayers = new Map();
     return {
       emitter,
       markerLayers,
-      onDidChangeMarkers: (callback) => emitter.on("did-change-markers", callback),
+      onDidFinishAddingMarkers: (callback) => emitter.on("did-finish-adding-markers", callback),
+      onDidRemoveAllMarkers: (callback) => emitter.on("did-remove-all-markers", callback),
       getMarkersForEditor: (markerEditor) => markerLayers.get(markerEditor)?.getMarkers() || [],
     };
   }
@@ -95,7 +97,7 @@ describe("highlight-selected marker layer", () => {
         [11, 5],
       ],
     );
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-finish-adding-markers");
     expect(layer.update).toHaveBeenCalled();
     expect(layer.items).toEqual([
       { row: 2, end: 2 },
@@ -115,7 +117,7 @@ describe("highlight-selected marker layer", () => {
         [3, 5],
       ],
     );
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-finish-adding-markers");
     expect(layer.items).toEqual([
       { row: 20, end: 20 },
       { row: 3, end: 3 },
@@ -129,10 +131,10 @@ describe("highlight-selected marker layer", () => {
       [2, 0],
       [2, 5],
     ]);
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-finish-adding-markers");
     initial.clear();
-    service.emitter.emit("did-change-markers", editor);
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-remove-all-markers");
+    service.emitter.emit("did-finish-adding-markers");
     expect(layer.update.calls.count()).toBeGreaterThan(0);
     expect(getMarkers).not.toHaveBeenCalled();
 
@@ -150,80 +152,12 @@ describe("highlight-selected marker layer", () => {
       [2, 0],
       [2, 5],
     ]);
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-finish-adding-markers");
     expect(layer.items.length).toBe(1);
 
     editorMarkerLayer.clear();
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-remove-all-markers");
     expect(layer.items).toEqual([]);
-  });
-
-  it("drops a highlight invalidated by Enter while valid anchors keep following the edit", () => {
-    const markers = editor.addMarkerLayer();
-    const edited = markers.markScreenRange(
-      [
-        [2, 0],
-        [2, 5],
-      ],
-      { invalidate: "inside" },
-    );
-    const following = markers.markScreenRange(
-      [
-        [10, 0],
-        [10, 5],
-      ],
-      { invalidate: "inside" },
-    );
-    service.markerLayers.set(editor, markers);
-    service.emitter.emit("did-change-markers", editor);
-    expect(layer.items.length).toBe(2);
-
-    editor.getBuffer().insert([2, 2], "\n");
-
-    expect(edited.isValid()).toBe(false);
-    expect(following.isValid()).toBe(true);
-    // Poll current native anchors before another producer notification.
-    expect(provider.getItems(layer)).toEqual([{ row: 11, end: 11 }]);
-  });
-
-  it("updates only the edited native layer before the selection debounce runs", () => {
-    consumerDisposable.dispose();
-    const manager = mainModule.selectionManager;
-    consumerDisposable = markerLayer.connect(mainModule.provideHighlightSelected());
-    const background = lumine.workspace.buildTextEditor();
-    background.setText(Array(20).fill("hello world").join("\n"));
-    manager.setupMarkerLayers(background);
-    const overview = makeLayer(background);
-    const native = manager.editorToMarkerLayerMap[background.id].markerLayer;
-    const edited = native.markBufferRange(
-      [
-        [2, 0],
-        [2, 5],
-      ],
-      { invalidate: "inside" },
-    );
-    native.markBufferRange(
-      [
-        [10, 0],
-        [10, 5],
-      ],
-      { invalidate: "inside" },
-    );
-    const rescan = spyOn(manager.searchModel, "handleSelection").and.callThrough();
-    layer.update.calls.reset();
-    overview.update.calls.reset();
-    try {
-      background.getBuffer().insert([2, 2], "x");
-
-      expect(edited.isValid()).toBe(false);
-      expect(overview.update).toHaveBeenCalled();
-      expect(overview.items).toEqual([{ row: 10, end: 10 }]);
-      expect(layer.update).not.toHaveBeenCalled();
-      expect(rescan).not.toHaveBeenCalled();
-    } finally {
-      overview.disposables.dispose();
-      background.destroy();
-    }
   });
 
   it("forgets the editor when its layer detaches", () => {
@@ -234,7 +168,7 @@ describe("highlight-selected marker layer", () => {
       [7, 0],
       [8, 5],
     ]);
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-finish-adding-markers");
 
     expect(layer.update).not.toHaveBeenCalled();
     expect(markerLayer.layers.size).toBe(0);
@@ -273,12 +207,12 @@ describe("highlight-selected marker layer", () => {
     layer.update.calls.reset();
 
     // Only the current connection may invalidate, even while both subscribe.
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-finish-adding-markers");
     expect(layer.update).toHaveBeenCalledTimes(1);
     previous.dispose();
     expect(markerLayer.highlightService).toBe(service);
     layer.update.calls.reset();
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-remove-all-markers");
     expect(layer.update).toHaveBeenCalledTimes(1);
   });
 
@@ -287,14 +221,14 @@ describe("highlight-selected marker layer", () => {
       [7, 0],
       [7, 5],
     ]);
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-finish-adding-markers");
     expect(layer.items.length).toBe(1);
     layer.update.calls.reset();
     consumerDisposable.dispose();
     expect(layer.update).toHaveBeenCalledTimes(1);
     expect(layer.items).toEqual([]);
     layer.update.calls.reset();
-    service.emitter.emit("did-change-markers", editor);
+    service.emitter.emit("did-finish-adding-markers");
     expect(layer.update).not.toHaveBeenCalled();
     expect(markerLayer.highlightService).toBeNull();
   });

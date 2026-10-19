@@ -34,7 +34,7 @@
   },
   "providedServices": {
     "highlight-selected": {
-      "description": "Reports native highlight marker changes per editor",
+      "description": "Exposes highlight selection events",
       "versions": {
         "1.0.0": "provideHighlightSelected"
       }

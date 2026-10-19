@@ -103,19 +103,19 @@ describe("highlight-selected", () => {
       expect(getMarkers().length).toBe(1);
     });
 
-    it("reports the editor when its native markers are added or removed", () => {
-      const changed = jasmine.createSpy("changed");
-      selectionManager.onDidChangeMarkers(changed);
+    it("emits events when markers are added and removed", () => {
+      const added = jasmine.createSpy("added");
+      const removed = jasmine.createSpy("removed");
+      selectionManager.onDidFinishAddingMarkers(added);
+      selectionManager.onDidRemoveAllMarkers(removed);
 
       editor.setSelectedBufferRange([
         [0, 0],
         [0, 5],
       ]);
       flushDebounce();
-      expect(changed).toHaveBeenCalledWith(editor);
-      changed.calls.reset();
-      selectionManager.removeAllMarkers();
-      expect(changed).toHaveBeenCalledWith(editor);
+      expect(added).toHaveBeenCalled();
+      expect(removed).toHaveBeenCalled();
     });
   });
 
@@ -165,14 +165,15 @@ describe("highlight-selected", () => {
   describe("highlight-selected service", () => {
     it("provides a facade with the event API and a marker accessor", () => {
       const service = mainModule.provideHighlightSelected();
-      expect(typeof service.onDidChangeMarkers).toBe("function");
+      expect(typeof service.onDidFinishAddingMarkers).toBe("function");
+      expect(typeof service.onDidRemoveAllMarkers).toBe("function");
       expect(typeof service.getMarkersForEditor).toBe("function");
       // The internal selection manager stays private.
       expect(service.editorToMarkerLayerMap).toBeUndefined();
 
-      let changedEditor;
-      const sub = service.onDidChangeMarkers((targetEditor) => {
-        changedEditor = targetEditor;
+      let finished = false;
+      const sub = service.onDidFinishAddingMarkers(() => {
+        finished = true;
       });
       editor.setSelectedBufferRange([
         [0, 0],
@@ -181,7 +182,7 @@ describe("highlight-selected", () => {
       flushDebounce();
       sub.dispose();
 
-      expect(changedEditor).toBe(editor);
+      expect(finished).toBe(true);
       expect(service.getMarkersForEditor(editor).length).toBe(2);
     });
   });

@@ -124,6 +124,29 @@ describe("highlight-selected marker layer", () => {
     ]);
   });
 
+  it("defers a clear/add burst to one read of the current markers at the host poll", () => {
+    const getMarkers = spyOn(service, "getMarkersForEditor").and.callThrough();
+    layer.update.and.stub();
+    const initial = markRanges([
+      [2, 0],
+      [2, 5],
+    ]);
+    service.emitter.emit("did-finish-adding-markers");
+    initial.clear();
+    service.emitter.emit("did-remove-all-markers");
+    service.emitter.emit("did-finish-adding-markers");
+    expect(layer.update.calls.count()).toBeGreaterThan(0);
+    expect(getMarkers).not.toHaveBeenCalled();
+
+    // The producer can finish replacing its layer before the next frame polls.
+    markRanges([
+      [12, 0],
+      [13, 5],
+    ]);
+    expect(provider.getItems(layer)).toEqual([{ row: 12, end: 13 }]);
+    expect(getMarkers).toHaveBeenCalledTimes(1);
+  });
+
   it("clears the layer when all markers are removed", () => {
     const editorMarkerLayer = markRanges([
       [2, 0],
@@ -151,8 +174,59 @@ describe("highlight-selected marker layer", () => {
     expect(markerLayer.layers.size).toBe(0);
   });
 
-  it("stops updating the layer once the consumer is disposed", () => {
+  it("reads existing highlights when a new layer attaches without a change event", () => {
+    markRanges([
+      [7, 0],
+      [7, 5],
+    ]);
+    layer.disposables.dispose();
+
+    const attached = makeLayer(editor);
+    expect(attached.update).toHaveBeenCalled();
+    expect(attached.items).toEqual([{ row: 7, end: 7 }]);
+  });
+
+  it("reads current highlights when reconnecting without a change event", () => {
     consumerDisposable.dispose();
+    const highlights = markRanges([
+      [12, 0],
+      [13, 5],
+    ]);
+    const replacement = makeFakeService();
+    replacement.markerLayers.set(editor, highlights);
+    layer.update.calls.reset();
+
+    consumerDisposable = markerLayer.connect(replacement);
+    expect(layer.update).toHaveBeenCalledTimes(1);
+    expect(layer.items).toEqual([{ row: 12, end: 13 }]);
+  });
+
+  it("ignores events and disposal from an older connection to the same facade", () => {
+    const previous = consumerDisposable;
+    consumerDisposable = markerLayer.connect(service);
+    layer.update.calls.reset();
+
+    // Only the current connection may invalidate, even while both subscribe.
+    service.emitter.emit("did-finish-adding-markers");
+    expect(layer.update).toHaveBeenCalledTimes(1);
+    previous.dispose();
+    expect(markerLayer.highlightService).toBe(service);
+    layer.update.calls.reset();
+    service.emitter.emit("did-remove-all-markers");
+    expect(layer.update).toHaveBeenCalledTimes(1);
+  });
+
+  it("clears markers on disconnect and stops responding to the retired service", () => {
+    markRanges([
+      [7, 0],
+      [7, 5],
+    ]);
+    service.emitter.emit("did-finish-adding-markers");
+    expect(layer.items.length).toBe(1);
+    layer.update.calls.reset();
+    consumerDisposable.dispose();
+    expect(layer.update).toHaveBeenCalledTimes(1);
+    expect(layer.items).toEqual([]);
     layer.update.calls.reset();
     service.emitter.emit("did-finish-adding-markers");
     expect(layer.update).not.toHaveBeenCalled();

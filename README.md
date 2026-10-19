@@ -42,7 +42,7 @@ lumine-text-editor .highlights {
 
 ## Services
 
-- [`highlight-selected`](docs/highlight-selected.md): provided to expose the selection manager — other packages can observe marker events via `onDidFinishAddingMarkers` / `onDidRemoveAllMarkers` and read the per-editor marker layers.
+- [`highlight-selected`](docs/highlight-selected.md): provided to observe native marker changes per editor through `onDidChangeMarkers` and read the highlighted occurrences.
 - `marker.layer`: provided to draw the highlighted occurrences on the editor's overview maps (scrollbar, minimap).
 
 ## Contributing

@@ -30,16 +30,14 @@ In your `package.json`:
 ```ts
 type HighlightSelected = {
   getMarkersForEditor(editor: TextEditor): DisplayMarker[];
-  onDidFinishAddingMarkers(callback: () => void): Disposable;
-  onDidRemoveAllMarkers(callback: () => void): Disposable;
+  onDidChangeMarkers(callback: (editor: TextEditor) => void): Disposable;
 };
 ```
 
-| Member                               | Description                                                                |
-| ------------------------------------ | -------------------------------------------------------------------------- |
-| `getMarkersForEditor(editor)`        | The markers currently highlighted in that editor.                          |
-| `onDidFinishAddingMarkers(callback)` | Fires once a new highlight pass has finished adding its markers.           |
-| `onDidRemoveAllMarkers(callback)`    | Fires when the highlight is cleared — the selection changed or went empty. |
+| Member                         | Description                                                                                   |
+| ------------------------------ | --------------------------------------------------------------------------------------------- |
+| `getMarkersForEditor(editor)`  | The markers currently highlighted in that editor.                                             |
+| `onDidChangeMarkers(callback)` | Reports the editor whose native markers were created, moved, invalidated, cleared or retired. |
 
 A narrow facade over the package's selection manager, so consumers never depend on its internals.
 
@@ -52,8 +50,7 @@ module.exports = {
   consumeHighlightSelected(service) {
     const disposables = new CompositeDisposable();
     disposables.add(
-      service.onDidFinishAddingMarkers(() => this.redraw(service)),
-      service.onDidRemoveAllMarkers(() => this.clear()),
+      service.onDidChangeMarkers((editor) => this.redraw(editor, service)),
       new Disposable(() => this.clear()),
     );
     return disposables;
@@ -63,11 +60,11 @@ module.exports = {
 
 ## Behavior
 
-**Two events, not one**, and both matter. `onDidFinishAddingMarkers` is the "draw now" signal — it fires after a pass completes, not per marker, so you redraw once rather than per occurrence. `onDidRemoveAllMarkers` is the "erase now" signal; without handling it, an overlay keeps showing occurrences of a selection the user has already moved away from.
+`onDidChangeMarkers` reports changes from each editor's native marker layer, including positions and validity after an edit. A consumer can refresh only that editor without waiting for the next selection scan. Highlight creation is batched in a buffer transaction, and overview consumers coalesce notifications into their next frame.
 
-Neither event carries a payload or an editor. Re-query with `getMarkersForEditor` for the editors you draw.
+The callback receives the affected editor. Re-query with `getMarkersForEditor(editor)` and skip markers for which `isValid()` returns `false`, matching native highlight decorations.
 
-Neither replays on subscribe, so read the current state once when you receive the service.
+The event does not replay on subscribe, so read the current state once when you receive the service.
 
 The markers are live `DisplayMarker`s owned by `highlight-selected`; read positions on demand and never destroy them.
 

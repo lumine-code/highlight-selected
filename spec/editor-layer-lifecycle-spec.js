@@ -1,6 +1,11 @@
 const { CompositeDisposable } = require("lumine");
 
 describe("Highlight editor layer lifetime", () => {
+  // Processing fixtures use a real grammar; None deliberately disables this package.
+  beforeEach(async () => {
+    await lumine.packages.activatePackage("language-text");
+  });
+
   let editor, main, manager, service, disposables;
 
   beforeEach(async () => {

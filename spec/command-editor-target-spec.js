@@ -5,6 +5,11 @@ beforeEach(() => {
 });
 
 describe("Highlight occurrence command editor targets", () => {
+  // Processing fixtures use a real grammar; None deliberately disables this package.
+  beforeEach(async () => {
+    await lumine.packages.activatePackage("language-text");
+  });
+
   let editor, background, main;
   beforeEach(async () => {
     jasmine.useRealClock();

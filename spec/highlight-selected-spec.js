@@ -1,4 +1,9 @@
 describe("highlight-selected", () => {
+  // Processing fixtures use a real grammar; None deliberately disables this package.
+  beforeEach(async () => {
+    await lumine.packages.activatePackage("language-text");
+  });
+
   let workspaceElement, editor, editorElement, mainModule, selectionManager;
 
   function getMarkers() {

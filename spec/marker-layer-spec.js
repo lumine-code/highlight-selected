@@ -1,6 +1,11 @@
 const { CompositeDisposable, Emitter } = require("lumine");
 
 describe("highlight-selected marker layer", () => {
+  // Processing fixtures use a real grammar; None deliberately disables this package.
+  beforeEach(async () => {
+    await lumine.packages.activatePackage("language-text");
+  });
+
   let editor, mainModule, markerLayer, provider, layer, layers, service, consumerDisposable;
 
   // Minimal stand-in for the layer object a marker host passes to `initialize`

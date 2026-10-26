@@ -21,7 +21,7 @@ describe("Highlight editor layer lifetime", () => {
     main = (await lumine.packages.activatePackage("highlight-selected")).mainModule;
     manager = main.selectionManager;
     service = main.provideHighlightSelected();
-    manager.searchModel.handleSelection();
+    await manager.searchModel.handleSelection();
     expect(service.getMarkersForEditor(editor).length).toBe(2);
   });
 
@@ -47,7 +47,7 @@ describe("Highlight editor layer lifetime", () => {
       [0, 5],
       [0, 9],
     ]);
-    manager.searchModel.handleSelection();
+    await manager.searchModel.handleSelection();
     expect(service.getMarkersForEditor(editor).length).toBe(2);
   });
 
@@ -105,7 +105,7 @@ describe("Highlight editor layer lifetime", () => {
     main = (await lumine.packages.activatePackage("highlight-selected")).mainModule;
     manager = main.selectionManager;
     service = main.provideHighlightSelected();
-    manager.searchModel.handleSelection();
+    await manager.searchModel.handleSelection();
     expect(manager.editorToMarkerLayerMap[editor.id].markerLayer).not.toBe(
       previousLayers.markerLayer,
     );
@@ -139,7 +139,7 @@ describe("Highlight editor layer lifetime", () => {
       [0, 5],
       [0, 9],
     ]);
-    manager.searchModel.handleSelection();
+    await manager.searchModel.handleSelection();
     expect(second.update).toHaveBeenCalled();
     expect(provider.getItems(second).length).toBe(2);
   });

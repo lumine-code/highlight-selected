@@ -28,6 +28,8 @@ Commands available in `lumine-text-editor:not([mini])`:
 
 ## Customization
 
+Occurrence searches read immutable document snapshots in cancellable batches. Changing the selection, text, grammar or active editor retires obsolete work. `maximumHighlights` defaults to 2,000 across active editors; zero selects the hard limit of 10,000. Navigation and overview markers use this bounded highlighted set, so even a dense match never creates a marker for every occurrence in a large file.
+
 The style can be adjusted according to user preferences in the `styles.css` file, e.g. change highlight style:
 
 ```css

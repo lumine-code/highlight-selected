@@ -67,10 +67,11 @@
     },
     "maximumHighlights": {
       "title": "Maximum Highlights",
-      "description": "For performance purposes, the number of highlights is limited. Set to 0 for unlimited.",
+      "description": "Maximum highlighted occurrences across active editors. Zero selects the hard limit of 10,000; searches stop at this limit.",
       "type": "integer",
       "minimum": 0,
-      "default": 0
+      "maximum": 10000,
+      "default": 2000
     },
     "timeout": {
       "title": "Debounce Timer",

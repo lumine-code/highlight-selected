@@ -104,9 +104,15 @@ describe("highlight-selected", () => {
       const read = spyOn(editor.getLastSelection(), "getText").and.throwError(
         "unbounded selection read",
       );
-      expect(flushDebounce).not.toThrow();
-      expect(read).not.toHaveBeenCalled();
-      expect(getMarkers().length).toBe(0);
+      try {
+        expect(() => selectionManager.searchModel.handleSelection()).not.toThrow();
+        expect(read).not.toHaveBeenCalled();
+        expect(getMarkers().length).toBe(0);
+      } finally {
+        // Linux PRIMARY owns a separate, bounded selection read. Keep this
+        // assertion scoped to the package's incidental highlighting path.
+        read.and.callThrough();
+      }
     });
 
     it("bounds automatic single-line patterns before reading their text", () => {
@@ -115,9 +121,13 @@ describe("highlight-selected", () => {
       const read = spyOn(editor.getLastSelection(), "getText").and.throwError(
         "unbounded selection read",
       );
-      expect(flushDebounce).not.toThrow();
-      expect(read).not.toHaveBeenCalled();
-      expect(getMarkers().length).toBe(0);
+      try {
+        expect(() => selectionManager.searchModel.handleSelection()).not.toThrow();
+        expect(read).not.toHaveBeenCalled();
+        expect(getMarkers().length).toBe(0);
+      } finally {
+        read.and.callThrough();
+      }
     });
 
     it("retains UTF-16 minimum-length semantics for astral text", () => {
@@ -138,9 +148,13 @@ describe("highlight-selected", () => {
       const read = spyOn(editor.getLastSelection(), "getText").and.throwError(
         "short selection read",
       );
-      selectionManager.searchModel.handleSelection();
-      expect(read).not.toHaveBeenCalled();
-      expect(getMarkers().length).toBe(0);
+      try {
+        selectionManager.searchModel.handleSelection();
+        expect(read).not.toHaveBeenCalled();
+        expect(getMarkers().length).toBe(0);
+      } finally {
+        read.and.callThrough();
+      }
     });
 
     it("caps the number of highlights at the maximumHighlights setting", () => {

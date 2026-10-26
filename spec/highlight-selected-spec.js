@@ -98,6 +98,51 @@ describe("highlight-selected", () => {
       expect(getMarkers().length).toBe(0);
     });
 
+    it("rejects multiline selections before reading their text", () => {
+      editor.setText("selected line\n".repeat(10000));
+      editor.selectAll();
+      const read = spyOn(editor.getLastSelection(), "getText").and.throwError(
+        "unbounded selection read",
+      );
+      expect(flushDebounce).not.toThrow();
+      expect(read).not.toHaveBeenCalled();
+      expect(getMarkers().length).toBe(0);
+    });
+
+    it("bounds automatic single-line patterns before reading their text", () => {
+      editor.setText("x".repeat(5000));
+      editor.selectAll();
+      const read = spyOn(editor.getLastSelection(), "getText").and.throwError(
+        "unbounded selection read",
+      );
+      expect(flushDebounce).not.toThrow();
+      expect(read).not.toHaveBeenCalled();
+      expect(getMarkers().length).toBe(0);
+    });
+
+    it("retains UTF-16 minimum-length semantics for astral text", () => {
+      editor.setText("😀 😀");
+      lumine.config.set("highlight-selected.minimumLength", 2);
+      editor.setSelectedBufferRange([
+        [0, 0],
+        [0, 2],
+      ]);
+      flushDebounce();
+      expect(getMarkers().map((marker) => marker.getBufferRange().serialize())).toEqual([
+        [
+          [0, 3],
+          [0, 5],
+        ],
+      ]);
+      lumine.config.set("highlight-selected.minimumLength", 3);
+      const read = spyOn(editor.getLastSelection(), "getText").and.throwError(
+        "short selection read",
+      );
+      selectionManager.searchModel.handleSelection();
+      expect(read).not.toHaveBeenCalled();
+      expect(getMarkers().length).toBe(0);
+    });
+
     it("caps the number of highlights at the maximumHighlights setting", () => {
       lumine.config.set("highlight-selected.maximumHighlights", 1);
       editor.setSelectedBufferRange([

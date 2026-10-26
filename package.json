@@ -61,7 +61,7 @@
   "configSchema": {
     "minimumLength": {
       "title": "Minimum Length",
-      "description": "Minimum number of characters in selection before highlights are shown",
+      "description": "Minimum selected length in UTF-16 units before highlights are shown.",
       "type": "integer",
       "default": 2
     },

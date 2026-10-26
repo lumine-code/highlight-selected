@@ -4,7 +4,7 @@ Highlight all occurrences of the selected text.
 
 ## Features
 
-- **Automatic highlighting**: highlights all matching occurrences when text is selected.
+- **Automatic highlighting**: highlights matching occurrences for single-line selections up to 4,096 UTF-16 units.
 - **Occurrence navigation**: jump to the next or previous highlighted occurrence.
 - **Customizable style**: override highlight appearance via stylesheet.
 - **Scrollbar markers**: shows the highlighted occurrences on the scrollbar and minimap via the marker hub.

@@ -18,6 +18,26 @@ describe("bounded snapshot occurrence highlighting", () => {
       [0, 4],
     ]);
 
+  it("retires a queued debounce before an explicitly awaited search starts", async () => {
+    lumine.config.set("highlight-selected.timeout", 0);
+    editor.setText("word word");
+    select();
+    const buffer = editor.getBuffer();
+    const createSearch = buffer.createSearch.bind(buffer);
+    const searched = spyOn(buffer, "createSearch").and.callFake((...args) => {
+      const search = createSearch(...args);
+      const matches = search.matches.bind(search);
+      search.matches = async function* () {
+        await new Promise((resolve) => setTimeout(resolve, 10));
+        yield* matches();
+      };
+      return search;
+    });
+    await manager.searchModel.handleSelection();
+    expect(searched).toHaveBeenCalledTimes(1);
+    expect(manager.getMarkersForEditor(editor).length).toBe(1);
+  });
+
   it("finds a far occurrence in a giant row without legacy scan or whole-text access", async () => {
     editor.setText("word " + "x".repeat(1024 * 1024) + " word");
     select();
